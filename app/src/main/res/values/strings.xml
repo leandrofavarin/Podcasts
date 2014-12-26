@@ -3,6 +3,9 @@
 
     <string name="app_name">Podcasts</string>
     <string name="hello_world">Hello world!</string>
+
+    <!-- Home menu -->
+    <string name="action_directory">Browse Podcasts</string>
     <string name="action_settings">Settings</string>
 
 </resources>
