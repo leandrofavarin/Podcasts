@@ -73,7 +73,7 @@ public class VolleyRequestQueue {
         return getRequestQueue().add(request);
     }
 
-    public void cancelRequests(String tag) {
+    public void cancelPendingRequests(String tag) {
         tag = TextUtils.isEmpty(tag) ? TAG : tag;
         getRequestQueue().cancelAll(tag);
     }
