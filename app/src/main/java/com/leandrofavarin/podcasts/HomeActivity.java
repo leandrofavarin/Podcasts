@@ -1,12 +1,17 @@
 package com.leandrofavarin.podcasts;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.samples.apps.iosched.util.LogUtils;
+
 
 public class HomeActivity extends ActionBarActivity {
+
+    private static final String TAG = LogUtils.makeLogTag(HomeActivity.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +33,18 @@ public class HomeActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        switch (id) {
+            case R.id.action_directory:
+                startActivity(new Intent(this, DirectoryActivity.class));
+                return true;
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+            default:
+                LogUtils.LOGE(TAG, "Menu item id not recognized.");
+                break;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
