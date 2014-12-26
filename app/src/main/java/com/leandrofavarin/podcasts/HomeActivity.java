@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.samples.apps.iosched.util.LogUtils;
-
+import com.leandrofavarin.podcasts.directory.DirectoryActivity;
 
 public class HomeActivity extends ActionBarActivity {
 
@@ -18,7 +18,6 @@ public class HomeActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

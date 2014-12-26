@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.leandrofavarin.podcasts.DirectoryActivity"
+            android:name="com.leandrofavarin.podcasts.directory.DirectoryActivity"
             android:label="@string/title_activity_directory"></activity>
         <activity
             android:name="com.leandrofavarin.podcasts.SettingsActivity"
