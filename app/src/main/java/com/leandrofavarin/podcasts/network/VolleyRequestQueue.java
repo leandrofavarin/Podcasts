@@ -1,4 +1,4 @@
-package com.leandrofavarin.podcasts;
+package com.leandrofavarin.podcasts.network;
 
 import android.content.Context;
 import android.graphics.Bitmap;
