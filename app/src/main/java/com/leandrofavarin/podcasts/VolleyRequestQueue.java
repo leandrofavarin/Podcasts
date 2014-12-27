@@ -16,7 +16,8 @@ import com.google.samples.apps.iosched.util.LogUtils;
  * Singleton that interfaces with Volley's RequestQueue.
  * <p/>
  * It is possible to change Volley's log with:
- * $ adb shell setprop log.tag.Volley VERBOSE (System.getProperty())
+ * <p/>
+ * $ <code>adb shell setprop log.tag.Volley VERBOSE (System.getProperty())</code>
  */
 public class VolleyRequestQueue {
 
