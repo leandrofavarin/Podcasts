@@ -6,16 +6,17 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.leandrofavarin.podcasts.R;
+import com.leandrofavarin.podcasts.TitledFragment;
 
 import java.util.List;
 
 public class DirectoryPagerAdapter extends FragmentPagerAdapter {
 
     private Context context;
-    private List<Fragment> fragments;
+    private List<TitledFragment> fragments;
     private boolean isLargeScreen;
 
-    public DirectoryPagerAdapter(Context context, FragmentManager fManager, List<Fragment> items) {
+    public DirectoryPagerAdapter(Context context, FragmentManager fManager, List<TitledFragment> items) {
         super(fManager);
         this.context = context;
         this.fragments = items;
@@ -29,9 +30,7 @@ public class DirectoryPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        // TODO
-        //return mFragments.get(position).getTitle(context);
-        return position + " position";
+        return fragments.get(position).getTitle(context);
     }
 
     @Override

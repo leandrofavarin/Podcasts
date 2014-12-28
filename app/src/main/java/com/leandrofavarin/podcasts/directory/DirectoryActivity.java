@@ -2,13 +2,13 @@ package com.leandrofavarin.podcasts.directory;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 
 import com.example.android.common.view.SlidingTabLayout;
 import com.leandrofavarin.podcasts.R;
+import com.leandrofavarin.podcasts.TitledFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class DirectoryActivity extends ActionBarActivity {
 
         ViewPager mViewPager = (ViewPager) findViewById(R.id.viewpager);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        List<Fragment> fragments = getFragments();
+        List<TitledFragment> fragments = getFragments();
         DirectoryPagerAdapter adapter = new DirectoryPagerAdapter(this, fragmentManager, fragments);
         mViewPager.setAdapter(adapter);
 
@@ -35,10 +35,10 @@ public class DirectoryActivity extends ActionBarActivity {
         //TODO mViewPager.setCurrentItem(fragments.indexOf());
     }
 
-    private List<Fragment> getFragments() {
-        List<Fragment> fragments = new ArrayList<>();
+    private List<TitledFragment> getFragments() {
+        List<TitledFragment> fragments = new ArrayList<>();
 
-        CategoriesFragment categoriesFragment = new CategoriesFragment();
+        TitledFragment categoriesFragment = CategoriesFragment.newInstance();
         fragments.add(categoriesFragment);
 
         return fragments;

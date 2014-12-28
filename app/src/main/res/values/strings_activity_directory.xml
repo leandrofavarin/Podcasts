@@ -2,4 +2,6 @@
 <resources>
     <string name="title_activity_directory">Directory</string>
 
+    <!-- Tab Titles -->
+    <string name="title_tab_categories">Categories</string>
 </resources>
