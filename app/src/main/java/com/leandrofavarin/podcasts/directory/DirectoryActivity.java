@@ -29,6 +29,7 @@ public class DirectoryActivity extends ActionBarActivity {
         ButterKnife.inject(this);
 
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ViewPager mViewPager = (ViewPager) findViewById(R.id.viewpager);
         FragmentManager fragmentManager = getSupportFragmentManager();

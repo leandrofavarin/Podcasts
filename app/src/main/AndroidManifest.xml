@@ -11,7 +11,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="com.leandrofavarin.podcasts.HomeActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,10 +21,22 @@
         </activity>
         <activity
             android:name="com.leandrofavarin.podcasts.directory.DirectoryActivity"
-            android:label="@string/title_activity_directory"></activity>
+            android:label="@string/title_activity_directory"
+            android:launchMode="singleTop"
+            android:parentActivityName="com.leandrofavarin.podcasts.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.leandrofavarin.podcasts.HomeActivity" />
+        </activity>
         <activity
             android:name="com.leandrofavarin.podcasts.SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings"
+            android:launchMode="singleTop"
+            android:parentActivityName="com.leandrofavarin.podcasts.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.leandrofavarin.podcasts.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>
