@@ -4,4 +4,6 @@
 
     <!-- Tab Titles -->
     <string name="title_tab_categories">Categories</string>
+
+    <string name="empty_categories">No categories found.</string>
 </resources>
