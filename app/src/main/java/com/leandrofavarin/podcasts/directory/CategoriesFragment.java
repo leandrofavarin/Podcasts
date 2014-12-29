@@ -47,6 +47,9 @@ public class CategoriesFragment extends TitledFragment implements SwipeRefreshLa
         linearLayoutManager = new LinearLayoutManager(rootView.getContext());
         setupRecyclerView();
 
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accent);
+
         return rootView;
     }
 
