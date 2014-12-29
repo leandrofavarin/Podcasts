@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 
 import com.example.android.common.view.SlidingTabLayout;
 import com.leandrofavarin.podcasts.R;
@@ -13,12 +14,21 @@ import com.leandrofavarin.podcasts.TitledFragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class DirectoryActivity extends ActionBarActivity {
+
+    @InjectView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_directory);
+        ButterKnife.inject(this);
+
+        setSupportActionBar(toolbar);
 
         ViewPager mViewPager = (ViewPager) findViewById(R.id.viewpager);
         FragmentManager fragmentManager = getSupportFragmentManager();
