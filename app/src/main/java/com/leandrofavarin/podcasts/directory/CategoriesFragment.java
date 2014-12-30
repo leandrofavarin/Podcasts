@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -41,6 +42,9 @@ public class CategoriesFragment extends TitledFragment implements SwipeRefreshLa
 
     @InjectView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
+
+    @InjectView(android.R.id.empty)
+    TextView emptyView;
 
     public static CategoriesFragment newInstance() {
         return new CategoriesFragment();
