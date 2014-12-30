@@ -7,4 +7,5 @@
     <string name="title_tab_top_audio">Audio Podcasts</string>
 
     <string name="empty_categories">No categories found.</string>
+    <string name="empty_top_podcasts">No podcasts found.</string>
 </resources>
