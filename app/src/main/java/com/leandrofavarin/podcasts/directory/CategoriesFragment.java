@@ -17,7 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.leandrofavarin.podcasts.R;
 import com.leandrofavarin.podcasts.TitledFragment;
-import com.leandrofavarin.podcasts.network.GenreUrlCreator;
+import com.leandrofavarin.podcasts.network.CategoriesUrlCreator;
 import com.leandrofavarin.podcasts.network.VolleyRequestQueue;
 
 import org.json.JSONException;
@@ -60,8 +60,8 @@ public class CategoriesFragment extends TitledFragment implements SwipeRefreshLa
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accent);
 
-        GenreUrlCreator genreUrlCreator = new GenreUrlCreator();
-        String url = genreUrlCreator.create();
+        CategoriesUrlCreator categoriesUrlCreator = new CategoriesUrlCreator();
+        String url = categoriesUrlCreator.create();
 
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
@@ -101,6 +101,7 @@ public class CategoriesFragment extends TitledFragment implements SwipeRefreshLa
     private void setupRecyclerView(List<String> data) {
         CategoriesAdapter categoriesAdapter = new CategoriesAdapter(data);
         recyclerView.setAdapter(categoriesAdapter);
+
         animateList();
         animateProgress();
     }
