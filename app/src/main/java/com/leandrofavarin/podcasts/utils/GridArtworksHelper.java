@@ -9,60 +9,42 @@ public class GridArtworksHelper {
     private static final String TAG = LogUtils.makeLogTag(GridArtworksHelper.class);
 
     private Context context;
-    private int columnSize;
-    private int numItems;
     private int paddingPx;
-    private int paddingDp;
 
-    public GridArtworksHelper(Context context, int paddingDp) {
+    public GridArtworksHelper(Context context) {
         this.context = context;
-        this.paddingDp = paddingDp;
-        setPadding(paddingDp);
     }
 
     public void setPadding(int valueInDp) {
-        if (valueInDp >= 0) {
-            paddingPx = (int) UIUtils.convertDpToPx(context, valueInDp);
-        }
-    }
-
-    /**
-     * @return the value set in the constructor.
-     */
-    public int getPadding() {
-        return paddingDp;
+        paddingPx = (int) UIUtils.convertDpToPx(context, valueInDp);
     }
 
     public int getColumnSize() {
-        if (columnSize == 0) {
-            int width = DeviceUtils.getCurrentScreenWidthPx(context);
-            int numIntersectionSpaces = (numItems - 1) + 2;
-            int intersectionSpace = paddingPx;
-            int totalSpacing = numIntersectionSpaces * intersectionSpace;
-            columnSize = (width - totalSpacing) / numItems;
-        }
-        return columnSize;
+        int width = DeviceUtils.getCurrentScreenWidthPx(context);
+        int numIntersectionSpaces = (getNumColumns() - 1) + 2;
+        int intersectionSpace = paddingPx;
+        int totalSpacing = numIntersectionSpaces * intersectionSpace;
+        return (width - totalSpacing) / getNumColumns();
     }
 
     /**
      * Returns a value between 2 and 6 based on device's screen size and orientation.
      */
     public int getNumColumns() {
-        if (numItems == 0) {
-            double screenWidthInches = DeviceUtils.getCurrentScreenWidthInches(context);
-            if (screenWidthInches < 3.5) { // [0, 3.5[
-                numItems = 2;
-            } else if (screenWidthInches < 5.5) { // [3.5, 5.5[
-                numItems = 3;
-            } else if (screenWidthInches < 6) { // [5.5, 6[
-                numItems = 4;
-            } else if (screenWidthInches < 7) { // [6, 7[
-                numItems = 5;
-            } else { // [7, + oo[
-                numItems = 6;
-            }
-            LogUtils.LOGV(TAG, "Creating a list with " + numItems + " columns.");
+        int numColumns;
+        double screenWidthInches = DeviceUtils.getCurrentScreenWidthInches(context);
+        if (screenWidthInches < 3.5) { // [0, 3.5[
+            numColumns = 2;
+        } else if (screenWidthInches < 5.5) { // [3.5, 5.5[
+            numColumns = 3;
+        } else if (screenWidthInches < 6) { // [5.5, 6[
+            numColumns = 4;
+        } else if (screenWidthInches < 7) { // [6, 7[
+            numColumns = 5;
+        } else { // [7, + oo[
+            numColumns = 6;
         }
-        return numItems;
+        LogUtils.LOGV(TAG, "Creating a list with " + numColumns + " columns.");
+        return numColumns;
     }
 }
