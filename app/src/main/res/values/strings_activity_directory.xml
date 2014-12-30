@@ -4,6 +4,7 @@
 
     <!-- Tab Titles -->
     <string name="title_tab_categories">Categories</string>
+    <string name="title_tab_top_audio">Audio Podcasts</string>
 
     <string name="empty_categories">No categories found.</string>
 </resources>
