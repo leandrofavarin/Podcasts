@@ -101,6 +101,21 @@ public class CategoriesFragment extends TitledFragment implements SwipeRefreshLa
     private void setupRecyclerView(List<String> data) {
         CategoriesAdapter categoriesAdapter = new CategoriesAdapter(data);
         recyclerView.setAdapter(categoriesAdapter);
+        animateList();
+        animateProgress();
+    }
+
+    private void animateList() {
+        Context context = recyclerView.getContext();
+        long animDuration = context.getResources().getInteger(android.R.integer.config_mediumAnimTime);
+        recyclerView.setAlpha(0f);
+        recyclerView.animate().alpha(1f).setDuration(animDuration);
+    }
+
+    private void animateProgress() {
+        Context context = progressBar.getContext();
+        long animDuration = context.getResources().getInteger(android.R.integer.config_mediumAnimTime);
+        progressBar.animate().alpha(0f).setDuration(animDuration);
     }
 
     @Override
