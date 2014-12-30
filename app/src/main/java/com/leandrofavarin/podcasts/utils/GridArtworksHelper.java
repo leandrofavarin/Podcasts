@@ -17,10 +17,10 @@ public class GridArtworksHelper {
     public GridArtworksHelper(Context context, int paddingDp) {
         this.context = context;
         this.paddingDp = paddingDp;
-        setPadding(context, paddingDp);
+        setPadding(paddingDp);
     }
 
-    public void setPadding(Context context, int valueInDp) {
+    public void setPadding(int valueInDp) {
         if (valueInDp >= 0) {
             paddingPx = (int) UIUtils.convertDpToPx(context, valueInDp);
         }
