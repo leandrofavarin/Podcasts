@@ -104,6 +104,7 @@ public class CategoriesFragment extends TitledFragment implements SwipeRefreshLa
 
     private void setupRecyclerView(List<String> data) {
         CategoriesAdapter categoriesAdapter = new CategoriesAdapter(data);
+        categoriesAdapter.setEmptyView(emptyView);
         recyclerView.setAdapter(categoriesAdapter);
 
         animateList();
