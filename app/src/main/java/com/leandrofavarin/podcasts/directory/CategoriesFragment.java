@@ -10,11 +10,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.leandrofavarin.podcasts.R;
 import com.leandrofavarin.podcasts.TitledFragment;
+import com.leandrofavarin.podcasts.network.GenreUrlCreator;
+import com.leandrofavarin.podcasts.network.VolleyRequestQueue;
 
-import java.util.Arrays;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -30,8 +42,6 @@ public class CategoriesFragment extends TitledFragment implements SwipeRefreshLa
     @InjectView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
 
-    private LinearLayoutManager linearLayoutManager;
-
     public static CategoriesFragment newInstance() {
         return new CategoriesFragment();
     }
@@ -43,22 +53,53 @@ public class CategoriesFragment extends TitledFragment implements SwipeRefreshLa
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_categories, container, false);
         ButterKnife.inject(this, rootView);
+        final Context context = rootView.getContext();
 
-        linearLayoutManager = new LinearLayoutManager(rootView.getContext());
-        setupRecyclerView();
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accent);
 
+        GenreUrlCreator genreUrlCreator = new GenreUrlCreator();
+        String url = genreUrlCreator.create();
+
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                List<String> genres = new ArrayList<>();
+                try {
+                    String podcastJsonKey = (String) response.names().get(0);
+                    JSONObject podcastJson = response.getJSONObject(podcastJsonKey);
+                    JSONObject subgenres = podcastJson.getJSONObject("subgenres");
+                    for (Iterator<String> iterator = subgenres.keys(); iterator.hasNext();) {
+                        String value = iterator.next();
+                        JSONObject subgenre = subgenres.getJSONObject(value);
+                        genres.add(subgenre.getString("name"));
+                    }
+                    Collections.sort(genres);
+                    setupRecyclerView(genres);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        JsonObjectRequest request = new JsonObjectRequest(url, null, listener, errorListener);
+
+        VolleyRequestQueue.getInstance(context).addToRequestQueue(request);
+
         return rootView;
     }
 
-    private void setupRecyclerView() {
-        recyclerView.setLayoutManager(linearLayoutManager);
-        String[] testData = new String[] { "Lorem", "ipsum", "dolor", "sit amet", "consectetur",
-                "adipiscing", "elit", "Quisque", "dapibus", "placerat", "convallis", "Nam",
-                "viverra", "magna", "nunc" };
-        CategoriesAdapter categoriesAdapter = new CategoriesAdapter(Arrays.asList(testData));
+    private void setupRecyclerView(List<String> data) {
+        CategoriesAdapter categoriesAdapter = new CategoriesAdapter(data);
         recyclerView.setAdapter(categoriesAdapter);
     }
 
