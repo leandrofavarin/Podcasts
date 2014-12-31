@@ -21,12 +21,12 @@ public class SimpleGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private List<Podcast> podcasts;
     private ImageLoader imageLoader;
-    private int preferredSize;
+    private static int preferredSize;
 
-    public SimpleGridAdapter(Context context, List<Podcast> items) {
+    public SimpleGridAdapter(Context context, List<Podcast> items, int columnWidth) {
         this.podcasts = items;
         this.imageLoader = VolleyRequestQueue.getInstance(context).getImageLoader();
-        //this.preferredSize = context.getResources().get TODO
+        preferredSize = columnWidth;
     }
 
     @Override
