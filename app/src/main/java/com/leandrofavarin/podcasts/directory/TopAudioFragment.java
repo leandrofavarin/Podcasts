@@ -73,6 +73,12 @@ public class TopAudioFragment extends TitledFragment implements SwipeRefreshLayo
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accent);
 
+        fetchRequest(context);
+
+        return rootView;
+    }
+
+    private void fetchRequest(final Context context) {
         TopAudioPodcastsUrlCreator urlCreator = new TopAudioPodcastsUrlCreator();
         urlCreator.preprendPath("us");
         String url = urlCreator.create();
@@ -118,13 +124,14 @@ public class TopAudioFragment extends TitledFragment implements SwipeRefreshLayo
         };
 
         JsonObjectRequest request = new JsonObjectRequest(url, null, listener, errorListener);
-
         VolleyRequestQueue.getInstance(context).addToRequestQueue(request);
-
-        return rootView;
     }
 
     private void setupRecyclerView(List<Podcast> data) {
+        if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+
         SimpleGridAdapter simpleGridAdapter = new SimpleGridAdapter(recyclerView.getContext(), data, columnWidth);
         simpleGridAdapter.setEmptyView(emptyView);
         recyclerView.setAdapter(simpleGridAdapter);
@@ -143,6 +150,7 @@ public class TopAudioFragment extends TitledFragment implements SwipeRefreshLayo
     private void animateProgress() {
         Context context = progressBar.getContext();
         long animDuration = context.getResources().getInteger(android.R.integer.config_mediumAnimTime);
+        progressBar.setAlpha(1f);
         progressBar.animate().alpha(0f).setDuration(animDuration);
     }
 
@@ -153,5 +161,9 @@ public class TopAudioFragment extends TitledFragment implements SwipeRefreshLayo
 
     @Override
     public void onRefresh() {
+        Context context = recyclerView.getContext();
+        recyclerView.setAlpha(0f);
+        progressBar.setAlpha(1f);
+        fetchRequest(context);
     }
 }
