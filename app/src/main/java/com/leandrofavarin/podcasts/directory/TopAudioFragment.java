@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.leandrofavarin.podcasts.ArtworkProvider;
 import com.leandrofavarin.podcasts.Podcast;
 import com.leandrofavarin.podcasts.R;
 import com.leandrofavarin.podcasts.TitledFragment;
@@ -23,6 +24,8 @@ import com.leandrofavarin.podcasts.network.TopAudioPodcastsUrlCreator;
 import com.leandrofavarin.podcasts.network.VolleyRequestQueue;
 import com.leandrofavarin.podcasts.utils.GridArtworksHelper;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -78,7 +81,31 @@ public class TopAudioFragment extends TitledFragment implements SwipeRefreshLayo
             @Override
             public void onResponse(JSONObject response) {
                 List<Podcast> podcasts = new ArrayList<>();
+                try {
+                    JSONObject feed = response.getJSONObject("feed");
+                    JSONArray entries = feed.getJSONArray("entry");
+                    int arraySize = entries.length();
+                    for (int i = 0; i < arraySize; i++) {
+                        JSONObject entry = entries.getJSONObject(i);
+                        int id = entry.getJSONObject("id").getJSONObject("attributes").getInt("im:id");
+                        Podcast podcast = new Podcast(id);
 
+                        JSONArray imagesArray = entry.getJSONArray("im:image");
+                        int imagesSize = imagesArray.length();
+                        ArtworkProvider artworkProvider = new ArtworkProvider();
+                        for (int j = 0; j < imagesSize; j++) {
+                            JSONObject imageJson = imagesArray.getJSONObject(j);
+                            String url = imageJson.getString("label");
+                            int imageSize = imageJson.getJSONObject("attributes").getInt("height");
+                            artworkProvider.addSize(imageSize, url);
+                        }
+
+                        podcast.setArtworkProvider(artworkProvider);
+                        podcasts.add(podcast);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 setupRecyclerView(podcasts);
             }
         };
