@@ -126,6 +126,7 @@ public class TopAudioFragment extends TitledFragment implements SwipeRefreshLayo
 
     private void setupRecyclerView(List<Podcast> data) {
         SimpleGridAdapter simpleGridAdapter = new SimpleGridAdapter(recyclerView.getContext(), data, columnWidth);
+        simpleGridAdapter.setEmptyView(emptyView);
         recyclerView.setAdapter(simpleGridAdapter);
 
         animateList();
