@@ -52,6 +52,9 @@ public class DirectoryActivity extends ActionBarActivity {
         TitledFragment categoriesFragment = CategoriesFragment.newInstance();
         fragments.add(categoriesFragment);
 
+        TopAudioFragment topAudioFragment = TopAudioFragment.newInstance();
+        fragments.add(topAudioFragment);
+
         return fragments;
     }
 }
