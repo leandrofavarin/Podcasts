@@ -8,4 +8,7 @@
     <string name="action_directory">Browse Podcasts</string>
     <string name="action_settings">Settings</string>
 
+    <string name="action_country_picker">Podcast discovery region</string>
+    <string name="action_search">Search</string>
+
 </resources>
