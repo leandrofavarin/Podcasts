@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -86,6 +87,11 @@ public class SimpleGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         private CellSimpleGridViewHolder(View view) {
             super(view);
             ButterKnife.inject(this, view);
+
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(artwork.getLayoutParams());
+            layoutParams.width = preferredSize;
+            layoutParams.height = preferredSize;
+            artwork.setLayoutParams(layoutParams);
         }
     }
 }
