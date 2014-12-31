@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -18,8 +19,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.leandrofavarin.podcasts.Podcast;
 import com.leandrofavarin.podcasts.R;
 import com.leandrofavarin.podcasts.TitledFragment;
-import com.leandrofavarin.podcasts.network.CategoriesUrlCreator;
+import com.leandrofavarin.podcasts.network.TopAudioPodcastsUrlCreator;
 import com.leandrofavarin.podcasts.network.VolleyRequestQueue;
+import com.leandrofavarin.podcasts.utils.GridArtworksHelper;
 
 import org.json.JSONObject;
 
@@ -40,6 +42,10 @@ public class TopAudioFragment extends TitledFragment implements SwipeRefreshLayo
     @InjectView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
 
+    @InjectView(android.R.id.empty)
+    TextView emptyView;
+    private int columnWidth;
+
     public static TopAudioFragment newInstance() {
         return new TopAudioFragment();
     }
@@ -53,33 +59,27 @@ public class TopAudioFragment extends TitledFragment implements SwipeRefreshLayo
         ButterKnife.inject(this, rootView);
         final Context context = rootView.getContext();
 
-        recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
+        GridArtworksHelper gridArtworksHelper = new GridArtworksHelper(context);
+        int gridPadding = (int) context.getResources().getDimension(R.dimen.grid_padding);
+        gridArtworksHelper.setPadding(gridPadding);
+        int numColumns = gridArtworksHelper.getNumColumns();
+        columnWidth = gridArtworksHelper.getColumnSize();
 
+        emptyView.setText(R.string.empty_top_podcasts);
+        recyclerView.setLayoutManager(new GridLayoutManager(context, numColumns));
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accent);
 
-        CategoriesUrlCreator categoriesUrlCreator = new CategoriesUrlCreator();
-        String url = categoriesUrlCreator.create();
+        TopAudioPodcastsUrlCreator urlCreator = new TopAudioPodcastsUrlCreator();
+        urlCreator.preprendPath("us");
+        String url = urlCreator.create();
 
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-//                List<String> genres = new ArrayList<>();
-//                try {
-//                    String podcastJsonKey = (String) response.names().get(0);
-//                    JSONObject podcastJson = response.getJSONObject(podcastJsonKey);
-//                    JSONObject subgenres = podcastJson.getJSONObject("subgenres");
-//                    for (Iterator<String> iterator = subgenres.keys(); iterator.hasNext();) {
-//                        String value = iterator.next();
-//                        JSONObject subgenre = subgenres.getJSONObject(value);
-//                        genres.add(subgenre.getString("name"));
-//                    }
-//                    Collections.sort(genres);
-//                    setupRecyclerView(genres);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-                setupRecyclerView(new ArrayList<Podcast>());
+                List<Podcast> podcasts = new ArrayList<>();
+
+                setupRecyclerView(podcasts);
             }
         };
 
@@ -98,7 +98,7 @@ public class TopAudioFragment extends TitledFragment implements SwipeRefreshLayo
     }
 
     private void setupRecyclerView(List<Podcast> data) {
-        SimpleGridAdapter simpleGridAdapter = new SimpleGridAdapter(recyclerView.getContext(), data);
+        SimpleGridAdapter simpleGridAdapter = new SimpleGridAdapter(recyclerView.getContext(), data, columnWidth);
         recyclerView.setAdapter(simpleGridAdapter);
 
         animateList();
@@ -120,7 +120,7 @@ public class TopAudioFragment extends TitledFragment implements SwipeRefreshLayo
 
     @Override
     public String getTitle(Context context) {
-        return context.getString(R.string.title_tab_categories);
+        return context.getString(R.string.title_tab_top_audio);
     }
 
     @Override
