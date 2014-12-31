@@ -21,6 +21,7 @@ public class DirectoryActivity extends ActionBarActivity {
 
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
+    private TopAudioFragment topAudioFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,19 +32,19 @@ public class DirectoryActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         FragmentManager fragmentManager = getSupportFragmentManager();
         List<TitledFragment> fragments = getFragments();
         DirectoryPagerAdapter adapter = new DirectoryPagerAdapter(this, fragmentManager, fragments);
-        mViewPager.setAdapter(adapter);
+        viewPager.setAdapter(adapter);
 
         SlidingTabLayout mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setCustomTabView(R.layout.view_sliding_tab, R.id.text_view);
         mSlidingTabLayout.setDividerColors(android.R.color.white);
         mSlidingTabLayout.setSelectedIndicatorColors(Color.WHITE);
-        mSlidingTabLayout.setViewPager(mViewPager);
+        mSlidingTabLayout.setViewPager(viewPager);
 
-        //TODO mViewPager.setCurrentItem(fragments.indexOf());
+        viewPager.setCurrentItem(fragments.indexOf(topAudioFragment));
     }
 
     private List<TitledFragment> getFragments() {
@@ -52,7 +53,7 @@ public class DirectoryActivity extends ActionBarActivity {
         TitledFragment categoriesFragment = CategoriesFragment.newInstance();
         fragments.add(categoriesFragment);
 
-        TopAudioFragment topAudioFragment = TopAudioFragment.newInstance();
+        topAudioFragment = TopAudioFragment.newInstance();
         fragments.add(topAudioFragment);
 
         return fragments;
