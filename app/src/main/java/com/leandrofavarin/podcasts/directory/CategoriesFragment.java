@@ -64,6 +64,12 @@ public class CategoriesFragment extends TitledFragment implements SwipeRefreshLa
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accent);
 
+        fetchRequest(context);
+
+        return rootView;
+    }
+
+    private void fetchRequest(final Context context) {
         CategoriesUrlCreator categoriesUrlCreator = new CategoriesUrlCreator();
         String url = categoriesUrlCreator.create();
 
@@ -98,11 +104,13 @@ public class CategoriesFragment extends TitledFragment implements SwipeRefreshLa
         JsonObjectRequest request = new JsonObjectRequest(url, null, listener, errorListener);
 
         VolleyRequestQueue.getInstance(context).addToRequestQueue(request);
-
-        return rootView;
     }
 
     private void setupRecyclerView(List<String> data) {
+        if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+
         CategoriesAdapter categoriesAdapter = new CategoriesAdapter(data);
         categoriesAdapter.setEmptyView(emptyView);
         recyclerView.setAdapter(categoriesAdapter);
@@ -121,6 +129,7 @@ public class CategoriesFragment extends TitledFragment implements SwipeRefreshLa
     private void animateProgress() {
         Context context = progressBar.getContext();
         long animDuration = context.getResources().getInteger(android.R.integer.config_mediumAnimTime);
+        progressBar.setAlpha(1f);
         progressBar.animate().alpha(0f).setDuration(animDuration);
     }
 
@@ -131,5 +140,9 @@ public class CategoriesFragment extends TitledFragment implements SwipeRefreshLa
 
     @Override
     public void onRefresh() {
+        Context context = recyclerView.getContext();
+        recyclerView.setAlpha(0f);
+        progressBar.setAlpha(1f);
+        fetchRequest(context);
     }
 }
