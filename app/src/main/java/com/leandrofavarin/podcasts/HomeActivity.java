@@ -2,7 +2,6 @@ package com.leandrofavarin.podcasts;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,22 +9,29 @@ import android.view.MenuItem;
 import com.google.samples.apps.iosched.util.LogUtils;
 import com.leandrofavarin.podcasts.directory.DirectoryActivity;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+import java.util.ArrayList;
+import java.util.List;
 
-public class HomeActivity extends ActionBarActivity {
+public class HomeActivity extends SwipeableActivity {
 
     private static final String TAG = LogUtils.makeLogTag(HomeActivity.class);
-
-    @InjectView(R.id.toolbar)
-    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        ButterKnife.inject(this);
+    }
+
+    @Override
+    protected void setupActionBar(Toolbar toolbar) {
         setSupportActionBar(toolbar);
+    }
+
+    @Override
+    protected List<TitledFragment> getFragments() {
+        List<TitledFragment> fragments = new ArrayList<>();
+        fragments.add(PlaylistsFragment.newInstance());
+        fragments.add(SubscriptionsFragment.newInstance());
+        return fragments;
     }
 
     @Override

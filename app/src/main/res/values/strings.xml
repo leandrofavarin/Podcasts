@@ -4,11 +4,25 @@
     <string name="app_name">Podcasts</string>
     <string name="hello_world">Hello world!</string>
 
+    <!-- Tab Titles -->
+    <string name="title_tab_playlists">Playlists</string>
+    <string name="title_tab_subscriptions">Podcasts</string>
+
+    <!-- Empty strings -->
+    <string name="empty_playlists">No playlists found.</string>
+    <string name="empty_subscriptions">No podcasts found. Subscribe from <u>here</u>.</string>
+
     <!-- Home menu -->
     <string name="action_directory">Browse Podcasts</string>
     <string name="action_settings">Settings</string>
 
     <string name="action_country_picker">Podcast discovery region</string>
     <string name="action_search">Search</string>
+
+    <string name="subscribe_to_podcast">Subscribe to this podcast</string>
+
+    <!-- Utils -->
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet</string>
+    <string name="lorem_ipsum_extense">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec facilisis arcu nibh, vel vestibulum risus semper nec. Sed a sapien neque. Quisque condimentum magna a nisi consequat dignissim. Etiam leo elit, eleifend nec scelerisque ut, laoreet quis ligula. Sed at tincidunt lorem. Pellentesque vitae justo aliquet, egestas sapien nec, volutpat dolor. Donec aliquam euismod mi non tempus. Mauris massa nisl, convallis eget laoreet vitae, molestie a leo. Vestibulum ac leo ac diam dapibus convallis. Morbi lacinia dui ipsum.</string>
 
 </resources>
