@@ -3,11 +3,19 @@ package com.leandrofavarin.podcasts;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class PlaylistsFragment extends TitledFragment {
+
+    @InjectView(R.id.recycler_view)
+    RecyclerView recyclerView;
 
     public static PlaylistsFragment newInstance() {
         return new PlaylistsFragment();
@@ -18,7 +26,13 @@ public class PlaylistsFragment extends TitledFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View rootView = inflater.inflate(R.layout.view_refreshable_recyclerview, container, false);
+        ButterKnife.inject(this, rootView);
+        final Context context = rootView.getContext();
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        return rootView;
     }
 
     @Override
