@@ -20,18 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:dividerHeight="1dp"
-            tools:listitem="@layout/cell_category" />
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+    <include layout="@layout/view_refreshable_recyclerview" />
 
 </RelativeLayout>
