@@ -55,7 +55,7 @@ public class CategoriesFragment extends TitledFragment implements SwipeRefreshLa
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_categories, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_empty_refreshable_list, container, false);
         ButterKnife.inject(this, rootView);
         final Context context = rootView.getContext();
 
