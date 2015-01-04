@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/subscribe_button"
+    android:layout_width="@dimen/add_subscriptions_button_height"
+    android:layout_height="@dimen/add_subscriptions_button_height"
+    android:layout_marginLeft="@dimen/keyline_1_minus_8dp"
+    android:layout_marginStart="@dimen/keyline_1_minus_8dp"
+    android:background="@drawable/add_subscriptions_fab_background"
+    android:clickable="true"
+    android:contentDescription="@string/subscribe_to_podcast"
+    android:focusable="true"
+    android:visibility="invisible">
+
+    <ImageView
+        android:id="@+id/add_schedule_icon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:contentDescription="@null"
+        android:scaleType="center"
+        android:src="@drawable/ic_add_white_24dp" />
+
+</LinearLayout>
