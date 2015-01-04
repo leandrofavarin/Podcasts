@@ -10,7 +10,8 @@
 
     <!-- Empty strings -->
     <string name="empty_playlists">No playlists found.</string>
-    <string name="empty_subscriptions">No podcasts found. Subscribe from <u>here</u>.</string>
+    <string name="empty_subscriptions">No podcasts found. Subscribe from here.</string>
+    <string name="empty_subscriptions_clickable_text">here</string>
 
     <!-- Home menu -->
     <string name="action_directory">Browse Podcasts</string>

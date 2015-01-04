@@ -1,16 +1,21 @@
 package com.leandrofavarin.podcasts;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.leandrofavarin.podcasts.directory.DirectoryActivity;
 import com.leandrofavarin.podcasts.directory.SimpleGridAdapter;
 import com.leandrofavarin.podcasts.utils.GridArtworksHelper;
 
@@ -43,11 +48,35 @@ public class SubscriptionsFragment extends TitledFragment {
         ButterKnife.inject(this, rootView);
         final Context context = rootView.getContext();
 
-        emptyView.setText(R.string.empty_subscriptions);
+        setClickableEmptyView();
+
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         updateList(context);
 
         return rootView;
+    }
+
+    private void setClickableEmptyView() {
+        emptyView.setLinkTextColor(getResources().getColor(R.color.accent));
+        emptyView.setHighlightColor(getResources().getColor(R.color.primary_dark));
+
+        String text = getString(R.string.empty_subscriptions);
+        String goToDirectory = getString(R.string.empty_subscriptions_clickable_text);
+        int start = text.indexOf(goToDirectory);
+        int end = start + goToDirectory.length();
+
+        SpannableString spannableString = new SpannableString(text);
+        spannableString.setSpan(new OpenDirectorySpan(), start, end, 0);
+        emptyView.setText(spannableString);
+        emptyView.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    private static class OpenDirectorySpan extends ClickableSpan {
+        @Override
+        public void onClick(View view) {
+            Context context = view.getContext();
+            context.startActivity(new Intent(context, DirectoryActivity.class));
+        }
     }
 
     private void updateList(Context context) {
