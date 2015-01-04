@@ -166,6 +166,9 @@ public class TopAudioFragment extends TitledFragment
     public void onItemClick(View view, int position) {
         Context context = view.getContext();
         Podcast podcast = simpleGridAdapter.getItem(position);
+        Intent intent = new Intent(context, PodcastActivity.class);
+        intent.putExtra(PodcastActivity.PODCAST_ID, podcast.getId());
+        context.startActivity(intent);
     }
 
     @Override
