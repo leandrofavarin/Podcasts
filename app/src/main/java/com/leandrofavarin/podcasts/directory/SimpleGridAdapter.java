@@ -12,6 +12,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.leandrofavarin.podcasts.Emptiness;
 import com.leandrofavarin.podcasts.Podcast;
 import com.leandrofavarin.podcasts.R;
+import com.leandrofavarin.podcasts.adapter.OnItemClickListener;
 import com.leandrofavarin.podcasts.network.VolleyRequestQueue;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class SimpleGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private ImageLoader imageLoader;
     private View emptyView;
     private static int preferredSize;
+    private OnItemClickListener onItemClickListener;
 
     private RecyclerView.AdapterDataObserver adapterDataObserver = new RecyclerView.AdapterDataObserver() {
         @Override
@@ -39,6 +41,14 @@ public class SimpleGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.imageLoader = VolleyRequestQueue.getInstance(context).getImageLoader();
         preferredSize = columnWidth;
         registerAdapterDataObserver(adapterDataObserver);
+    }
+
+    public Podcast getItem(int position) {
+        return podcasts.get(position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -63,7 +73,7 @@ public class SimpleGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         final View view = inflater.inflate(R.layout.cell_simple_grid, parent, false);
-        return new CellSimpleGridViewHolder(view);
+        return new CellSimpleGridViewHolder(view, onItemClickListener);
     }
 
     @Override
@@ -79,19 +89,31 @@ public class SimpleGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return podcasts.size();
     }
 
-    static class CellSimpleGridViewHolder extends RecyclerView.ViewHolder {
+    static class CellSimpleGridViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @InjectView(R.id.artwork)
         NetworkImageView artwork;
 
-        private CellSimpleGridViewHolder(View view) {
+        private OnItemClickListener onItemClickListener;
+
+        private CellSimpleGridViewHolder(View view, OnItemClickListener onItemClickListener) {
             super(view);
             ButterKnife.inject(this, view);
+            this.onItemClickListener = onItemClickListener;
 
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(artwork.getLayoutParams());
             layoutParams.width = preferredSize;
             layoutParams.height = preferredSize;
             artwork.setLayoutParams(layoutParams);
+
+            artwork.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(view, getPosition());
+            }
         }
     }
 }

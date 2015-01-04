@@ -1,6 +1,7 @@
 package com.leandrofavarin.podcasts.directory;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -18,8 +19,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.leandrofavarin.podcasts.ArtworkProvider;
 import com.leandrofavarin.podcasts.Podcast;
+import com.leandrofavarin.podcasts.PodcastActivity;
 import com.leandrofavarin.podcasts.R;
 import com.leandrofavarin.podcasts.TitledFragment;
+import com.leandrofavarin.podcasts.adapter.OnItemClickListener;
 import com.leandrofavarin.podcasts.network.TopAudioPodcastsUrlCreator;
 import com.leandrofavarin.podcasts.network.VolleyRequestQueue;
 import com.leandrofavarin.podcasts.utils.GridArtworksHelper;
@@ -34,7 +37,8 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class TopAudioFragment extends TitledFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class TopAudioFragment extends TitledFragment
+        implements SwipeRefreshLayout.OnRefreshListener, OnItemClickListener {
 
     @InjectView(R.id.progress_bar)
     ProgressBar progressBar;
@@ -47,7 +51,9 @@ public class TopAudioFragment extends TitledFragment implements SwipeRefreshLayo
 
     @InjectView(android.R.id.empty)
     TextView emptyView;
+
     private int columnWidth;
+    private SimpleGridAdapter simpleGridAdapter;
 
     public static TopAudioFragment newInstance() {
         return new TopAudioFragment();
@@ -58,7 +64,7 @@ public class TopAudioFragment extends TitledFragment implements SwipeRefreshLayo
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_categories, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_empty_refreshable_list, container, false);
         ButterKnife.inject(this, rootView);
         final Context context = rootView.getContext();
 
@@ -132,8 +138,10 @@ public class TopAudioFragment extends TitledFragment implements SwipeRefreshLayo
             swipeRefreshLayout.setRefreshing(false);
         }
 
-        SimpleGridAdapter simpleGridAdapter = new SimpleGridAdapter(recyclerView.getContext(), data, columnWidth);
+        Context context = recyclerView.getContext();
+        simpleGridAdapter = new SimpleGridAdapter(context, data, columnWidth);
         simpleGridAdapter.setEmptyView(emptyView);
+        simpleGridAdapter.setOnItemClickListener(this);
         recyclerView.setAdapter(simpleGridAdapter);
 
         animateList();
@@ -152,6 +160,12 @@ public class TopAudioFragment extends TitledFragment implements SwipeRefreshLayo
         long animDuration = context.getResources().getInteger(android.R.integer.config_mediumAnimTime);
         progressBar.setAlpha(1f);
         progressBar.animate().alpha(0f).setDuration(animDuration);
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Context context = view.getContext();
+        Podcast podcast = simpleGridAdapter.getItem(position);
     }
 
     @Override
