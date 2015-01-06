@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.leandrofavarin.podcasts.Emptiness;
 import com.leandrofavarin.podcasts.R;
+import com.leandrofavarin.podcasts.adapter.OnItemClickListener;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private List<String> categories;
     private View emptyView;
+    private OnItemClickListener onItemClickListener;
 
     private RecyclerView.AdapterDataObserver adapterDataObserver = new RecyclerView.AdapterDataObserver() {
         @Override
@@ -30,6 +32,14 @@ public class CategoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public CategoriesAdapter(List<String> items) {
         this.categories = items;
         registerAdapterDataObserver(adapterDataObserver);
+    }
+
+    public String getItem(int position) {
+        return categories.get(position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -54,7 +64,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         final View view = inflater.inflate(R.layout.cell_category, parent, false);
-        return new CellCategoriesViewHolder(view);
+        return new CellCategoriesViewHolder(view, onItemClickListener);
     }
 
     @Override
@@ -68,14 +78,25 @@ public class CategoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return categories.size();
     }
 
-    static class CellCategoriesViewHolder extends RecyclerView.ViewHolder {
+    static class CellCategoriesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @InjectView(android.R.id.text1)
         TextView categoryName;
 
-        private CellCategoriesViewHolder(View view) {
+        private OnItemClickListener onItemClickListener;
+
+        private CellCategoriesViewHolder(View view, OnItemClickListener onItemClickListener) {
             super(view);
             ButterKnife.inject(this, view);
+            this.onItemClickListener = onItemClickListener;
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(view, getPosition());
+            }
         }
     }
 }
