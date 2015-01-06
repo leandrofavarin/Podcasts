@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.leandrofavarin.podcasts.R;
 import com.leandrofavarin.podcasts.TitledFragment;
+import com.leandrofavarin.podcasts.adapter.OnItemClickListener;
 import com.leandrofavarin.podcasts.network.CategoriesUrlCreator;
 import com.leandrofavarin.podcasts.network.VolleyRequestQueue;
 
@@ -32,7 +33,8 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class CategoriesFragment extends TitledFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class CategoriesFragment extends TitledFragment
+        implements SwipeRefreshLayout.OnRefreshListener, OnItemClickListener {
 
     @InjectView(R.id.progress_bar)
     ProgressBar progressBar;
@@ -45,6 +47,7 @@ public class CategoriesFragment extends TitledFragment implements SwipeRefreshLa
 
     @InjectView(android.R.id.empty)
     TextView emptyView;
+    private CategoriesAdapter categoriesAdapter;
 
     public static CategoriesFragment newInstance() {
         return new CategoriesFragment();
@@ -111,8 +114,9 @@ public class CategoriesFragment extends TitledFragment implements SwipeRefreshLa
             swipeRefreshLayout.setRefreshing(false);
         }
 
-        CategoriesAdapter categoriesAdapter = new CategoriesAdapter(data);
+        categoriesAdapter = new CategoriesAdapter(data);
         categoriesAdapter.setEmptyView(emptyView);
+        categoriesAdapter.setOnItemClickListener(this);
         recyclerView.setAdapter(categoriesAdapter);
 
         animateList();
@@ -131,6 +135,13 @@ public class CategoriesFragment extends TitledFragment implements SwipeRefreshLa
         long animDuration = context.getResources().getInteger(android.R.integer.config_mediumAnimTime);
         progressBar.setAlpha(1f);
         progressBar.animate().alpha(0f).setDuration(animDuration);
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Context context = view.getContext();
+        String category = categoriesAdapter.getItem(position);
+        Toast.makeText(context, "Clicked: " + category, Toast.LENGTH_SHORT).show();
     }
 
     @Override
