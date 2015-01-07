@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.google.samples.apps.iosched.ui.widget.ObservableScrollView;
 import com.google.samples.apps.iosched.util.LogUtils;
 
 import java.security.InvalidParameterException;
@@ -12,11 +13,14 @@ import java.security.InvalidParameterException;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class PodcastActivity extends ActionBarActivity {
+public class PodcastActivity extends ActionBarActivity implements ObservableScrollView.Callbacks {
 
     private static final String TAG = LogUtils.makeLogTag(PodcastActivity.class);
 
     public static final String PODCAST_ID = "podcast_id";
+
+    @InjectView(R.id.scroll_view)
+    ObservableScrollView scrollView;
 
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
@@ -40,5 +44,12 @@ public class PodcastActivity extends ActionBarActivity {
                 finish();
             }
         });
+
+        scrollView.addCallbacks(this);
+    }
+
+    @Override
+    public void onScrollChanged(int deltaX, int deltaY) {
+
     }
 }
