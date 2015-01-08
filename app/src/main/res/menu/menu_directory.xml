@@ -8,11 +8,12 @@
         android:icon="@drawable/ic_world_white_24dp"
         android:orderInCategory="100"
         android:title="@string/action_country_picker"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/abc_ic_search_api_mtrl_alpha"
         android:orderInCategory="100"
         android:title="@string/action_search"
-        app:showAsAction="ifRoom" />
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView" />
 </menu>
