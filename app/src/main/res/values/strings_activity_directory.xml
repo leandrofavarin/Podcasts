@@ -9,4 +9,6 @@
     <!-- Empty strings -->
     <string name="empty_categories">No categories found.</string>
     <string name="empty_top_podcasts">No podcasts found.</string>
+
+    <string name="search_hint">Search or enter a URL</string>
 </resources>
