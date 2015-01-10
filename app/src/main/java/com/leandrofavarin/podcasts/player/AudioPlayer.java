@@ -70,4 +70,12 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
     public void onPrepared(MediaPlayer mp) {
 
     }
+
+    private void start() {
+        mediaPlayer.start();
+    }
+
+    private void pause() {
+        mediaPlayer.pause();
+    }
 }
