@@ -1,4 +1,4 @@
-package com.leandrofavarin.podcasts;
+package com.leandrofavarin.podcasts.player;
 
 import android.app.Service;
 import android.content.Intent;
