@@ -6,12 +6,15 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 
 public class AudioPlayer extends Service implements MediaPlayer.OnCompletionListener,
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
 
     private MediaPlayer mediaPlayer;
     private IBinder audioPlayerBinder;
+    private PhoneStateListener phoneStateListener;
 
     @Override
     public void onCreate() {
@@ -23,6 +26,8 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
         mediaPlayer.setOnInfoListener(this);
         mediaPlayer.setOnPreparedListener(this);
         audioPlayerBinder = new AudioPlayerBinder();
+
+        monitorPhoneState();
     }
 
     public class AudioPlayerBinder extends Binder {
@@ -49,6 +54,32 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return Service.START_STICKY;
+    }
+
+    private void monitorPhoneState() {
+        // Pay attention to incoming calls
+        phoneStateListener = new PhoneStateListener() {
+
+            private boolean wasPlaying;
+
+            @Override
+            public void onCallStateChanged(int state, String incomingNumber) {
+                if (state == TelephonyManager.CALL_STATE_RINGING) {
+                    wasPlaying = (mediaPlayer != null) && mediaPlayer.isPlaying();
+                    pause();
+                } else if (state == TelephonyManager.CALL_STATE_IDLE) {
+                    if (wasPlaying) {
+                        start();
+                    }
+                }
+                super.onCallStateChanged(state, incomingNumber);
+            }
+        };
+
+        TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        if (mgr != null) {
+            mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        }
     }
 
     @Override
