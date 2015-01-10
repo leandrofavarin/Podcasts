@@ -38,8 +38,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.leandrofavarin.podcasts.HomeActivity" />
         </activity>
-        <activity android:name="com.leandrofavarin.podcasts.PodcastActivity"
+        <activity
+            android:name="com.leandrofavarin.podcasts.PodcastActivity"
             android:label="@string/title_activity_podcast" />
+
+        <service android:name="com.leandrofavarin.podcasts.player.AudioPlayer" />
     </application>
 
 </manifest>
