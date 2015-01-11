@@ -9,14 +9,18 @@ import android.view.MenuItem;
 import android.widget.SearchView;
 
 import com.google.samples.apps.iosched.util.LogUtils;
+import com.leandrofavarin.podcasts.Countries;
 import com.leandrofavarin.podcasts.R;
 import com.leandrofavarin.podcasts.SwipeableActivity;
 import com.leandrofavarin.podcasts.TitledFragment;
 
+import net.kristopherjohnson.ItemPickerDialogFragment;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class DirectoryActivity extends SwipeableActivity implements SearchView.OnQueryTextListener {
+public class DirectoryActivity extends SwipeableActivity
+        implements SearchView.OnQueryTextListener, ItemPickerDialogFragment.OnItemSelectedListener {
 
     private static final String TAG = LogUtils.makeLogTag(DirectoryActivity.class);
 
@@ -81,7 +85,14 @@ public class DirectoryActivity extends SwipeableActivity implements SearchView.O
     }
 
     private void openCountryPicker() {
+        String title = getString(R.string.action_country_picker);
+        List<ItemPickerDialogFragment.Item> countries = new Countries(this).getCountries();
+        ItemPickerDialogFragment dialog = ItemPickerDialogFragment.newInstance(title, countries, 0);
+        dialog.show(getFragmentManager(), ItemPickerDialogFragment.TAG);
+    }
 
+    @Override
+    public void onItemSelected(ItemPickerDialogFragment fragment, ItemPickerDialogFragment.Item item, int index) {
     }
 
     @Override
