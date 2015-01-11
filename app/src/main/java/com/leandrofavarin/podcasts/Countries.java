@@ -2,6 +2,8 @@ package com.leandrofavarin.podcasts;
 
 import android.content.Context;
 
+import net.kristopherjohnson.ItemPickerDialogFragment;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,17 +14,7 @@ import java.util.List;
 public class Countries {
 
     private static final String COUNTRIES_FILENAME = "countries.txt";
-    private static final List<Country> countries = new ArrayList<>();
-
-    public class Country {
-        String name;
-        String shortName;
-
-        private Country(String name, String shortName) {
-            this.name = name;
-            this.shortName = shortName;
-        }
-    }
+    private static final List<ItemPickerDialogFragment.Item> countries = new ArrayList<>();
 
     public Countries(Context context) {
         if (!countries.isEmpty()) {
@@ -37,7 +29,9 @@ public class Countries {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 String[] args = line.split(";");
-                Country country = new Country(args[1], args[0]);
+                String name = args[1];
+                String value = args[0];
+                ItemPickerDialogFragment.Item country = new ItemPickerDialogFragment.Item(name, value);
                 countries.add(country);
             }
         } catch (IOException e) {
@@ -60,7 +54,7 @@ public class Countries {
         }
     }
 
-    public List<Country> getCountries() {
+    public List<ItemPickerDialogFragment.Item> getCountries() {
         return countries;
     }
 }
