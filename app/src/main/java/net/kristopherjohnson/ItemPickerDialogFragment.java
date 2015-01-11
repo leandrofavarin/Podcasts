@@ -6,8 +6,9 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
+import android.support.annotation.NonNull;
+
+import com.google.samples.apps.iosched.util.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,8 @@ import java.util.List;
  * Dialog fragment that allows user to select an item from a list
  */
 public class ItemPickerDialogFragment extends DialogFragment {
-    public static final String LOGTAG = "kj.ItemPickerDialogFragment";
+
+    public static final String TAG = LogUtils.makeLogTag(ItemPickerDialogFragment.class);
 
     /**
      * An item that can be displayed and selected by the ItemPickerDialogFragment
@@ -26,8 +28,8 @@ public class ItemPickerDialogFragment extends DialogFragment {
         private int intValue;
         private String stringValue;
 
-        private static final String KEY_TITLE        = "title";
-        private static final String KEY_INT_VALUE    = "intValue";
+        private static final String KEY_TITLE = "title";
+        private static final String KEY_INT_VALUE = "intValue";
         private static final String KEY_STRING_VALUE = "stringValue";
 
         /**
@@ -37,8 +39,6 @@ public class ItemPickerDialogFragment extends DialogFragment {
          * @param value Integer value associated with item
          */
         public Item(String title, int value) {
-            assert(!TextUtils.isEmpty(title));
-
             this.title = title;
             this.intValue = value;
         }
@@ -50,15 +50,14 @@ public class ItemPickerDialogFragment extends DialogFragment {
          * @param value String value associated with item
          */
         public Item(String title, String value) {
-            assert(!TextUtils.isEmpty(title));
-
             this.title = title;
             this.stringValue = value;
         }
 
         /**
          * Construct from a bundle of values
-         * @param bundle
+         *
+         * @param bundle the bundle
          */
         public Item(Bundle bundle) {
             title = bundle.getString(KEY_TITLE, null);
@@ -125,7 +124,7 @@ public class ItemPickerDialogFragment extends DialogFragment {
         public static ArrayList<Item> itemsFromBundle(Bundle bundle) {
             ArrayList<Bundle> itemBundles = bundle.getParcelableArrayList(ARG_ITEMS);
             ArrayList<Item> items = new ArrayList<>();
-            for (Bundle itemBundle: itemBundles) {
+            for (Bundle itemBundle : itemBundles) {
                 items.add(new Item(itemBundle));
             }
             return items;
@@ -134,12 +133,12 @@ public class ItemPickerDialogFragment extends DialogFragment {
 
     /**
      * Interface for notification of item selection
-     *
+     * <p/>
      * If the owning Activity implements this interface, then the fragment will
      * invoke its onItemSelected() method when the user clicks the OK button.
      */
-    public interface OnItemSelectedListener {
-        void onItemSelected(ItemPickerDialogFragment fragment, Item item, int index);
+    public static interface OnItemSelectedListener {
+        public abstract void onItemSelected(ItemPickerDialogFragment fragment, Item item, int index);
     }
 
     private static final String ARG_TITLE = "ARG_TITLE";
@@ -149,12 +148,12 @@ public class ItemPickerDialogFragment extends DialogFragment {
     /**
      * Create a new instance of ItemPickerDialogFragment with specified arguments
      *
-     * @param title Dialog title text
-     * @param items Selectable items
+     * @param title         Dialog title text
+     * @param items         Selectable items
      * @param selectedIndex initial selection index, or -1 if no item should be pre-selected
      * @return ItemPickerDialogFragment
      */
-    public static ItemPickerDialogFragment newInstance(String title, ArrayList<Item> items, int selectedIndex) {
+    public static ItemPickerDialogFragment newInstance(String title, List<Item> items, int selectedIndex) {
         Bundle args = new Bundle();
         args.putString(ARG_TITLE, title);
         args.putBundle(ARG_ITEMS, Item.bundleOfItems(items));
@@ -166,19 +165,15 @@ public class ItemPickerDialogFragment extends DialogFragment {
     }
 
     private String title;
-    private ArrayList<Item> items;
+    private List<Item> items;
     private int selectedIndex;
 
-    /**
-     * Constructor
-     */
     public ItemPickerDialogFragment() {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-
         outState.putInt(ARG_SELECTED_INDEX, selectedIndex);
     }
 
@@ -195,41 +190,47 @@ public class ItemPickerDialogFragment extends DialogFragment {
             selectedIndex = savedInstanceState.getInt(ARG_SELECTED_INDEX, selectedIndex);
         }
 
+        DialogInterface.OnClickListener positiveCallback = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                LogUtils.LOGD(TAG, "OK button clicked");
+                Activity activity = getActivity();
+                if (!(activity instanceof OnItemSelectedListener)) {
+                    String activityName = activity.getClass().getSimpleName();
+                    String interfaceName = OnItemSelectedListener.class.getSimpleName();
+                    throw new ClassCastException(activityName + " must implement " + interfaceName);
+                }
+                if (0 <= selectedIndex && selectedIndex < items.size()) {
+                    Item item = items.get(selectedIndex);
+                    OnItemSelectedListener listener = (OnItemSelectedListener) activity;
+                    listener.onItemSelected(ItemPickerDialogFragment.this, item, selectedIndex);
+                }
+            }
+        };
+
+        DialogInterface.OnClickListener negativeCallback = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                LogUtils.LOGD(TAG, "Cancel button clicked");
+                // OK, just let the dialog be closed
+            }
+        };
+
+        DialogInterface.OnClickListener singleChoiceCallback = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                LogUtils.LOGD(TAG, "User clicked item with index " + which);
+                selectedIndex = which;
+            }
+        };
+
         String[] itemTitles = getItemTitlesArray();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(title)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d(LOGTAG, "OK button clicked");
-
-                        Activity activity = getActivity();
-                        if (activity instanceof OnItemSelectedListener) {
-                            if (0 <= selectedIndex && selectedIndex < items.size()) {
-                                Item item = items.get(selectedIndex);
-                                OnItemSelectedListener listener = (OnItemSelectedListener)activity;
-                                listener.onItemSelected(ItemPickerDialogFragment.this, item, selectedIndex);
-                            }
-                        }
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d(LOGTAG, "Cancel button clicked");
-
-                        // OK, just let the dialog be closed
-                    }
-                })
-                .setSingleChoiceItems(itemTitles, selectedIndex, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d(LOGTAG, "User clicked item with index " + which);
-                        selectedIndex = which;
-                    }
-                });
-
+                .setPositiveButton(android.R.string.ok, positiveCallback)
+                .setNegativeButton(android.R.string.cancel, negativeCallback)
+                .setSingleChoiceItems(itemTitles, selectedIndex, singleChoiceCallback);
         return builder.create();
     }
 
