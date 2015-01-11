@@ -12,9 +12,12 @@ import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
+import com.google.samples.apps.iosched.util.LogUtils;
+
 public class AudioPlayer extends Service implements MediaPlayer.OnCompletionListener,
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
 
+    public static final String TAG = LogUtils.makeLogTag(AudioPlayer.class);
     public static final String INTENT_BASE_NAME = "com.leandrofavarin.player.AudioPlayer";
     public static final String ACTION_PREVIOUS = INTENT_BASE_NAME + ".ACTION_PREVIOUS";
     public static final String ACTION_PLAY_PAUSE = INTENT_BASE_NAME + ".ACTION_PLAY_PAUSE";
@@ -162,6 +165,7 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
                 case ACTION_STOP:
                     break;
                 default:
+                    LogUtils.LOGE(TAG, "Action not recognized: " + action);
                     break;
             }
         }
