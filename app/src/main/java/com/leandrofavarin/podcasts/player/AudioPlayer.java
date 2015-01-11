@@ -1,7 +1,10 @@
 package com.leandrofavarin.podcasts.player;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
@@ -12,9 +15,16 @@ import android.telephony.TelephonyManager;
 public class AudioPlayer extends Service implements MediaPlayer.OnCompletionListener,
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
 
+    public static final String INTENT_BASE_NAME = "com.leandrofavarin.player.AudioPlayer";
+    public static final String ACTION_PREVIOUS = INTENT_BASE_NAME + ".ACTION_PREVIOUS";
+    public static final String ACTION_PLAY_PAUSE = INTENT_BASE_NAME + ".ACTION_PLAY_PAUSE";
+    public static final String ACTION_NEXT = INTENT_BASE_NAME + ".ACTION_NEXT";
+    public static final String ACTION_STOP = INTENT_BASE_NAME + ".ACTION_STOP";
+
     private MediaPlayer mediaPlayer;
     private IBinder audioPlayerBinder;
     private PhoneStateListener phoneStateListener;
+    private AudioPlayerBroadcastReceiver broadcastReceiver;
 
     @Override
     public void onCreate() {
@@ -28,6 +38,7 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
         audioPlayerBinder = new AudioPlayerBinder();
 
         monitorPhoneState();
+        setupIntentFilters();
     }
 
     public class AudioPlayerBinder extends Binder {
@@ -82,6 +93,16 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
         }
     }
 
+    private void setupIntentFilters() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_PREVIOUS);
+        intentFilter.addAction(ACTION_PLAY_PAUSE);
+        intentFilter.addAction(ACTION_NEXT);
+        intentFilter.addAction(ACTION_STOP);
+        broadcastReceiver = new AudioPlayerBroadcastReceiver();
+        registerReceiver(broadcastReceiver, intentFilter);
+    }
+
     /**
      * Called by the system to notify a Service that it is no longer used and is being removed.
      * The service should clean up any resources it holds (threads, registered receivers, etc)
@@ -92,6 +113,7 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
     public void onDestroy() {
         super.onDestroy();
         stopMonitorPhoneState();
+        unregisterReceiver(broadcastReceiver);
     }
 
     private void stopMonitorPhoneState() {
@@ -127,5 +149,25 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
 
     private void pause() {
         mediaPlayer.pause();
+    }
+
+    private class AudioPlayerBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            switch (action) {
+                case ACTION_PREVIOUS:
+                    break;
+                case ACTION_PLAY_PAUSE:
+                    break;
+                case ACTION_NEXT:
+                    break;
+                case ACTION_STOP:
+                    break;
+                default:
+                    break;
+            }
+        }
+
     }
 }
