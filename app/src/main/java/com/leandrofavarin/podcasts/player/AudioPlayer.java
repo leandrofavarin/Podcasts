@@ -137,7 +137,7 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-
+        start();
     }
 
     private void start() {
