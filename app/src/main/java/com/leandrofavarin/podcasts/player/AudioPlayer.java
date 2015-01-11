@@ -23,8 +23,24 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
 
     private MediaPlayer mediaPlayer;
     private IBinder audioPlayerBinder;
-    private PhoneStateListener phoneStateListener;
     private AudioPlayerBroadcastReceiver broadcastReceiver;
+
+    private PhoneStateListener phoneStateListener = new PhoneStateListener() {
+        private boolean wasPlaying;
+
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+            if (state == TelephonyManager.CALL_STATE_RINGING) {
+                wasPlaying = (mediaPlayer != null) && mediaPlayer.isPlaying();
+                pause();
+            } else if (state == TelephonyManager.CALL_STATE_IDLE) {
+                if (wasPlaying) {
+                    start();
+                }
+            }
+            super.onCallStateChanged(state, incomingNumber);
+        }
+    };
 
     @Override
     public void onCreate() {
@@ -68,25 +84,6 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
     }
 
     private void monitorPhoneState() {
-        // Pay attention to incoming calls
-        phoneStateListener = new PhoneStateListener() {
-
-            private boolean wasPlaying;
-
-            @Override
-            public void onCallStateChanged(int state, String incomingNumber) {
-                if (state == TelephonyManager.CALL_STATE_RINGING) {
-                    wasPlaying = (mediaPlayer != null) && mediaPlayer.isPlaying();
-                    pause();
-                } else if (state == TelephonyManager.CALL_STATE_IDLE) {
-                    if (wasPlaying) {
-                        start();
-                    }
-                }
-                super.onCallStateChanged(state, incomingNumber);
-            }
-        };
-
         TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         if (mgr != null) {
             mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
