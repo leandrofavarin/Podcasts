@@ -2,6 +2,7 @@ package com.leandrofavarin.podcasts;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +33,11 @@ public class HomeActivity extends SwipeableActivity {
         fragments.add(PlaylistsFragment.newInstance());
         fragments.add(SubscriptionsFragment.newInstance());
         return fragments;
+    }
+
+    @Override
+    protected FragmentPagerAdapter getFragmentPagerAdapter() {
+        return new TitledFragmentsPagerAdapter(this, getSupportFragmentManager(), getFragments());
     }
 
     @Override
