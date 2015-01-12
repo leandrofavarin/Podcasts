@@ -116,6 +116,8 @@ public class DirectoryActivity extends SwipeableActivity
 
     @Override
     public void onItemSelected(ItemPickerDialogFragment fragment, ItemPickerDialogFragment.Item item, int index) {
+        UserPreferences userPreferences = new UserPreferences(this);
+        userPreferences.setChoosenCountry(item.getStringValue());
     }
 
     @Override
