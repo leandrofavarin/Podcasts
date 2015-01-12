@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Tab Titles -->
+    <string name="title_tab_playlists">Playlists</string>
+    <string name="title_tab_subscriptions">Podcasts</string>
+
+    <!-- Empty strings -->
+    <string name="empty_playlists">No playlists found.</string>
+    <string name="empty_subscriptions">No podcasts found. Subscribe from here.</string>
+    <string name="empty_subscriptions_clickable_text">here</string>
+
+    <!-- Menu -->
+    <string name="action_directory">Browse Podcasts</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Others -->
+    <string name="subscribe_to_podcast">Subscribe to this podcast</string>
+
+</resources>

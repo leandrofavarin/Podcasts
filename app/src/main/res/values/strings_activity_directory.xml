@@ -2,6 +2,10 @@
 <resources>
     <string name="title_activity_directory">Directory</string>
 
+    <!-- Menu -->
+    <string name="action_country_picker">Podcast discovery region</string>
+    <string name="action_search">Search</string>
+
     <!-- Tab Titles -->
     <string name="title_tab_categories">Categories</string>
     <string name="title_tab_top_audio">Audio Podcasts</string>
