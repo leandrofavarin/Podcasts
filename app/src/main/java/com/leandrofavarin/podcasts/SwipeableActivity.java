@@ -3,6 +3,7 @@ package com.leandrofavarin.podcasts;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -35,7 +36,7 @@ public abstract class SwipeableActivity extends ActionBarActivity {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         FragmentManager fragmentManager = getSupportFragmentManager();
         List<TitledFragment> fragments = getFragments();
-        DirectoryPagerAdapter adapter = new DirectoryPagerAdapter(this, fragmentManager, fragments);
+        FragmentPagerAdapter adapter = new DirectoryPagerAdapter(this, fragmentManager, fragments);
         viewPager.setAdapter(adapter);
 
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
