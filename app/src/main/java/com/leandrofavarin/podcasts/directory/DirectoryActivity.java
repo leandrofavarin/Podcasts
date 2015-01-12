@@ -13,11 +13,13 @@ import com.leandrofavarin.podcasts.Countries;
 import com.leandrofavarin.podcasts.R;
 import com.leandrofavarin.podcasts.SwipeableActivity;
 import com.leandrofavarin.podcasts.TitledFragment;
+import com.leandrofavarin.podcasts.UserPreferences;
 
 import net.kristopherjohnson.ItemPickerDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class DirectoryActivity extends SwipeableActivity
         implements SearchView.OnQueryTextListener, ItemPickerDialogFragment.OnItemSelectedListener {
@@ -86,8 +88,29 @@ public class DirectoryActivity extends SwipeableActivity
 
     private void openCountryPicker() {
         String title = getString(R.string.action_country_picker);
+
+        int selectedIndex = 0;
         List<ItemPickerDialogFragment.Item> countries = new Countries(this).getCountries();
-        ItemPickerDialogFragment dialog = ItemPickerDialogFragment.newInstance(title, countries, 0);
+        UserPreferences userPreferences = new UserPreferences(this);
+        if (userPreferences.hasChooseCountry()) {
+            String selectedCountryValue = userPreferences.getChoosenCountry();
+            for (int i = 0; i < countries.size(); i++) {
+                ItemPickerDialogFragment.Item country = countries.get(i);
+                if (country.getStringValue().equals(selectedCountryValue)) {
+                    // We set as i+1 because the first item will be the 'system region'
+                    selectedIndex = i + 1;
+                    break;
+                }
+            }
+        }
+
+        List<ItemPickerDialogFragment.Item> items = new ArrayList<>();
+        String systemRegionTitle = getString(R.string.obey_system_region);
+        String systemRegionValue = Locale.getDefault().getCountry();
+        items.add(new ItemPickerDialogFragment.Item(systemRegionTitle, systemRegionValue));
+        items.addAll(countries);
+
+        ItemPickerDialogFragment dialog = ItemPickerDialogFragment.newInstance(title, items, selectedIndex);
         dialog.show(getFragmentManager(), ItemPickerDialogFragment.TAG);
     }
 
