@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
@@ -15,9 +16,12 @@ import com.leandrofavarin.podcasts.R;
 import com.leandrofavarin.podcasts.SwipeableActivity;
 import com.leandrofavarin.podcasts.TitledFragment;
 import com.leandrofavarin.podcasts.UserPreferences;
+import com.leandrofavarin.podcasts.network.SearchUrlCreator;
 
 import net.kristopherjohnson.ItemPickerDialogFragment;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -128,7 +132,18 @@ public class DirectoryActivity extends SwipeableActivity
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        return false;
+        if (TextUtils.isEmpty(query)) {
+            return false;
+        }
+        String content;
+        try {
+            URL url = new URL(query);
+            content = query;
+        } catch (MalformedURLException e) {
+            SearchUrlCreator searchUrlCreator = new SearchUrlCreator(query);
+            content = searchUrlCreator.create();
+        }
+        return true;
     }
 
     @Override
