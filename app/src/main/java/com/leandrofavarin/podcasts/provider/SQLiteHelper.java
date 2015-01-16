@@ -30,6 +30,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     interface Tables {
         String SUBSCRIPTIONS = "subscriptions";
+
+        // When tables get deprecated, add them to this list (so they get correctly deleted on database upgrades)
+        interface DeprecatedTables {
+        }
     }
 
     @Override
