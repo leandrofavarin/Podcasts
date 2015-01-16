@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">Podcasts</string>
+    <string name="app_name_simplified">podcasts</string>
     <string name="hello_world">Hello world!</string>
 
     <!-- Utils -->
