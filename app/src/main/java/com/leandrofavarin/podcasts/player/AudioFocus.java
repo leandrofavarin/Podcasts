@@ -60,6 +60,7 @@ public class AudioFocus {
         LogUtils.LOGV(TAG, "Lost audio focus.");
         audioManager.abandonAudioFocus(audioFocusChangeListener);
         audioManager.unregisterMediaButtonEventReceiver(remoteControlResponder);
+        // TODO implement MediaSession on API 21+
     }
 
     public static class RemoteControlReceiver extends BroadcastReceiver {
