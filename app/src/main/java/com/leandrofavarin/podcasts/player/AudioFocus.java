@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 
 import com.google.samples.apps.iosched.util.LogUtils;
 
+// TODO implement MediaSession on API 21+
 public class AudioFocus {
 
     private static final String TAG = LogUtils.makeLogTag(AudioFocus.class);
@@ -53,14 +54,23 @@ public class AudioFocus {
     }
 
     public void getAudioFocus() {
-        // TODO
+        int result = audioManager.requestAudioFocus(
+                audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+            LogUtils.LOGV(TAG, "Received audio focus.");
+            audioManager.registerMediaButtonEventReceiver(remoteControlResponder);
+            hasAudioFocus = true;
+        } else if (result == AudioManager.AUDIOFOCUS_REQUEST_FAILED) {
+            LogUtils.LOGV(TAG, "Failed to received audio focus.");
+            audioManager.unregisterMediaButtonEventReceiver(remoteControlResponder);
+            hasAudioFocus = false;
+        }
     }
 
     public void removeAudioFocus() {
         LogUtils.LOGV(TAG, "Lost audio focus.");
         audioManager.abandonAudioFocus(audioFocusChangeListener);
         audioManager.unregisterMediaButtonEventReceiver(remoteControlResponder);
-        // TODO implement MediaSession on API 21+
     }
 
     public static class RemoteControlReceiver extends BroadcastReceiver {
