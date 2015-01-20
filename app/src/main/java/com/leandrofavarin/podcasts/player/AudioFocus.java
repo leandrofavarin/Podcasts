@@ -11,10 +11,39 @@ import com.google.samples.apps.iosched.util.LogUtils;
 
 public class AudioFocus {
 
+    private static final String TAG = LogUtils.makeLogTag(AudioFocus.class);
+
     private Context context;
     private ComponentName remoteControlResponder;
     private AudioManager audioManager;
     private boolean hasAudioFocus;
+
+    private AudioManager.OnAudioFocusChangeListener audioFocusChangeListener =
+            new AudioManager.OnAudioFocusChangeListener() {
+        @Override
+        public void onAudioFocusChange(int focusChange) {
+            switch (focusChange) {
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                    // TODO if is playing, then pause
+                    break;
+
+                case AudioManager.AUDIOFOCUS_GAIN:
+                    getAudioFocus();
+                    // TODO if was playing, then resume
+                    // TODO restore audio volume to 1.0f
+                    break;
+
+                case AudioManager.AUDIOFOCUS_LOSS:
+                    removeAudioFocus();
+                    // TODO if is playing, then pause
+                    break;
+
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                    // TODO lower volume (maybe to 0.1f)
+                    break;
+            }
+        }
+    };
 
     public AudioFocus(Context context) {
         this.context = context;
@@ -28,7 +57,9 @@ public class AudioFocus {
     }
 
     public void removeAudioFocus() {
-        // TODO
+        LogUtils.LOGV(TAG, "Lost audio focus.");
+        audioManager.abandonAudioFocus(audioFocusChangeListener);
+        audioManager.unregisterMediaButtonEventReceiver(remoteControlResponder);
     }
 
     public static class RemoteControlReceiver extends BroadcastReceiver {
