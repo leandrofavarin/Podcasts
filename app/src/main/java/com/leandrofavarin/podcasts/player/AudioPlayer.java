@@ -20,6 +20,8 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
     public static final String TAG = LogUtils.makeLogTag(AudioPlayer.class);
     public static final String INTENT_BASE_NAME = "com.leandrofavarin.player.AudioPlayer";
     public static final String ACTION_PREVIOUS = INTENT_BASE_NAME + ".ACTION_PREVIOUS";
+    public static final String ACTION_PLAY = INTENT_BASE_NAME + ".ACTION_PLAY";
+    public static final String ACTION_PAUSE = INTENT_BASE_NAME + ".ACTION_PAUSE";
     public static final String ACTION_PLAY_PAUSE = INTENT_BASE_NAME + ".ACTION_PLAY_PAUSE";
     public static final String ACTION_NEXT = INTENT_BASE_NAME + ".ACTION_NEXT";
     public static final String ACTION_STOP = INTENT_BASE_NAME + ".ACTION_STOP";
@@ -96,6 +98,8 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
     private void setupIntentFilters() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_PREVIOUS);
+        intentFilter.addAction(ACTION_PLAY);
+        intentFilter.addAction(ACTION_PAUSE);
         intentFilter.addAction(ACTION_PLAY_PAUSE);
         intentFilter.addAction(ACTION_NEXT);
         intentFilter.addAction(ACTION_STOP);
@@ -158,6 +162,10 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
             switch (action) {
                 case ACTION_PREVIOUS:
                     break;
+                case ACTION_PLAY:
+                    break;
+                case ACTION_PAUSE:
+                    break;
                 case ACTION_PLAY_PAUSE:
                     break;
                 case ACTION_NEXT:
@@ -169,6 +177,5 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
                     break;
             }
         }
-
     }
 }
