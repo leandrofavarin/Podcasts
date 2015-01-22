@@ -25,6 +25,8 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
     public static final String ACTION_PLAY_PAUSE = INTENT_BASE_NAME + ".ACTION_PLAY_PAUSE";
     public static final String ACTION_NEXT = INTENT_BASE_NAME + ".ACTION_NEXT";
     public static final String ACTION_STOP = INTENT_BASE_NAME + ".ACTION_STOP";
+    public static final String ACTION_RAISE_VOLUME = INTENT_BASE_NAME + ".ACTION_RAISE_VOLUME";
+    public static final String ACTION_LOWER_VOLUME = INTENT_BASE_NAME + ".ACTION_LOWER_VOLUME";
 
     private MediaPlayer mediaPlayer;
     private IBinder audioPlayerBinder;
@@ -103,6 +105,8 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
         intentFilter.addAction(ACTION_PLAY_PAUSE);
         intentFilter.addAction(ACTION_NEXT);
         intentFilter.addAction(ACTION_STOP);
+        intentFilter.addAction(ACTION_RAISE_VOLUME);
+        intentFilter.addAction(ACTION_LOWER_VOLUME);
         broadcastReceiver = new AudioPlayerBroadcastReceiver();
         registerReceiver(broadcastReceiver, intentFilter);
     }
@@ -155,6 +159,12 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
         mediaPlayer.pause();
     }
 
+    private void setVolume(float leftVolume, float rightVolume) {
+        if (mediaPlayer != null) {
+            mediaPlayer.setVolume(leftVolume, rightVolume);
+        }
+    }
+
     private class AudioPlayerBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -171,6 +181,12 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
                 case ACTION_NEXT:
                     break;
                 case ACTION_STOP:
+                    break;
+                case ACTION_RAISE_VOLUME:
+                    setVolume(1.0f, 1.0f);
+                    break;
+                case ACTION_LOWER_VOLUME:
+                    setVolume(0.1f, 0.1f);
                     break;
                 default:
                     LogUtils.LOGE(TAG, "Action not recognized: " + action);
