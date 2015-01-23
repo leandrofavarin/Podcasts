@@ -25,22 +25,21 @@ public class AudioFocus {
                 public void onAudioFocusChange(int focusChange) {
                     switch (focusChange) {
                         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                            // TODO if is playing, then pause
+                            context.startService(new Intent(AudioPlayer.ACTION_PAUSE));
                             break;
-
                         case AudioManager.AUDIOFOCUS_GAIN:
                             getAudioFocus();
-                            // TODO if was playing, then resume
-                            // TODO restore audio volume to 1.0f
+                            context.startService(new Intent(AudioPlayer.ACTION_RAISE_VOLUME));
+                            context.startService(new Intent(AudioPlayer.ACTION_PLAY_PAUSE));
                             break;
 
                         case AudioManager.AUDIOFOCUS_LOSS:
                             removeAudioFocus();
-                            // TODO if is playing, then pause
+                            context.startActivity(new Intent(AudioPlayer.ACTION_PAUSE));
                             break;
 
                         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                            // TODO lower volume (maybe to 0.1f)
+                            context.startActivity(new Intent(AudioPlayer.ACTION_LOWER_VOLUME));
                             break;
                     }
                 }
