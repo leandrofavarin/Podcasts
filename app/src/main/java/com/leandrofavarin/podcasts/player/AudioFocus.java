@@ -87,13 +87,13 @@ public class AudioFocus {
                 int keyCode = event.getKeyCode();
                 LogUtils.LOGD(TAG, "Received keyCode: " + keyCode);
                 if (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY) {
-                    // TODO send play/pause command
+                    context.startService(new Intent(AudioPlayer.ACTION_PLAY_PAUSE));
                 } else if (keyCode == KeyEvent.KEYCODE_MEDIA_PREVIOUS) {
-                    // TODO send previous command
+                    context.startService(new Intent(AudioPlayer.ACTION_PREVIOUS));
                 } else if (keyCode == KeyEvent.KEYCODE_MEDIA_NEXT) {
-                    // TODO send next command
+                    context.startService(new Intent(AudioPlayer.ACTION_NEXT));
                 } else if (keyCode == KeyEvent.KEYCODE_HEADSETHOOK) {
-                    // TODO send play/pause command
+                    context.startService(new Intent(AudioPlayer.ACTION_PLAY_PAUSE));
                 }
             }
         }
