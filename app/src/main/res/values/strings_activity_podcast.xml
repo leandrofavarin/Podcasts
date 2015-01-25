@@ -4,4 +4,6 @@
     
     <string name="about">About</string>
     <string name="episodes">Episodes</string>
+
+    <string name="action_share">Share podcast</string>
 </resources>
