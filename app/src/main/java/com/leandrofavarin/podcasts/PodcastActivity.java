@@ -3,6 +3,7 @@ package com.leandrofavarin.podcasts;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 
 import com.google.samples.apps.iosched.ui.widget.ObservableScrollView;
@@ -46,6 +47,12 @@ public class PodcastActivity extends ActionBarActivity implements ObservableScro
         });
 
         scrollView.addCallbacks(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_podcast, menu);
+        return true;
     }
 
     @Override
