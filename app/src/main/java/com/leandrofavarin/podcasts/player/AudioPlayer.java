@@ -14,6 +14,9 @@ import android.telephony.TelephonyManager;
 
 import com.google.samples.apps.iosched.util.LogUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AudioPlayer extends Service implements MediaPlayer.OnCompletionListener,
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
 
@@ -31,6 +34,7 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
     private MediaPlayer mediaPlayer;
     private IBinder audioPlayerBinder;
     private AudioPlayerBroadcastReceiver broadcastReceiver;
+    private List<PlayerObserver> audioPlayerObservers = new ArrayList<>();
 
     private PhoneStateListener phoneStateListener = new PhoneStateListener() {
         private boolean wasPlaying;
@@ -163,6 +167,21 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
         if (mediaPlayer != null) {
             mediaPlayer.setVolume(leftVolume, rightVolume);
         }
+    }
+
+    public void registerPlayerObserver(PlayerObserver observer) {
+        audioPlayerObservers.add(observer);
+        notifyAudioPlayerObservers();
+    }
+
+    public void removePlayerObserver(PlayerObserver observer) {
+        int i = audioPlayerObservers.indexOf(observer);
+        if (i >= 0) {
+            audioPlayerObservers.remove(i);
+        }
+    }
+
+    private void notifyAudioPlayerObservers() {
     }
 
     private class AudioPlayerBroadcastReceiver extends BroadcastReceiver {
