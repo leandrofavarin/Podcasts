@@ -14,6 +14,7 @@ import android.telephony.TelephonyManager;
 
 import com.google.samples.apps.iosched.util.LogUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -139,6 +140,20 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
         }
     }
 
+    private void play(String assetUri) {
+        playerState = PlayerState.PREPARING;
+        notifyAudioPlayerObservers();
+        mediaPlayer.reset();
+        try {
+            mediaPlayer.setDataSource(assetUri);
+            mediaPlayer.prepareAsync();
+            playerState = PlayerState.PREPARING;
+            notifyAudioPlayerObservers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onCompletion(MediaPlayer mp) {
 
@@ -172,10 +187,14 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
 
     private void start() {
         mediaPlayer.start();
+        playerState = PlayerState.PLAYING;
+        notifyAudioPlayerObservers();
     }
 
     private void pause() {
         mediaPlayer.pause();
+        playerState = PlayerState.PAUSED;
+        notifyAudioPlayerObservers();
     }
 
     private void setVolume(float leftVolume, float rightVolume) {
@@ -197,6 +216,9 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
     }
 
     private void notifyAudioPlayerObservers() {
+        for (PlayerObserver observer : audioPlayerObservers) {
+            observer.onPlayerStateChanged(playerState, playerInfo);
+        }
     }
 
     private class AudioPlayerBroadcastReceiver extends BroadcastReceiver {
