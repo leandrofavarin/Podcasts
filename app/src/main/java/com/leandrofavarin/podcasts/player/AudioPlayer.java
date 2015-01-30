@@ -35,6 +35,8 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
     private IBinder audioPlayerBinder;
     private AudioPlayerBroadcastReceiver broadcastReceiver;
     private List<PlayerObserver> audioPlayerObservers = new ArrayList<>();
+    private PlayerState playerState;
+    private PlayerInfo playerInfo;
 
     private PhoneStateListener phoneStateListener = new PhoneStateListener() {
         private boolean wasPlaying;
@@ -63,6 +65,8 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
         mediaPlayer.setOnInfoListener(this);
         mediaPlayer.setOnPreparedListener(this);
         audioPlayerBinder = new AudioPlayerBinder();
+        playerState = PlayerState.EMPTY;
+        playerInfo = new PlayerInfo();
 
         monitorPhoneState();
         setupIntentFilters();
@@ -155,6 +159,17 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
         start();
     }
 
+    private void playPause() {
+        if (mediaPlayer == null) {
+            return;
+        }
+        if (mediaPlayer.isPlaying()) {
+            pause();
+        } else {
+            start();
+        }
+    }
+
     private void start() {
         mediaPlayer.start();
     }
@@ -192,10 +207,13 @@ public class AudioPlayer extends Service implements MediaPlayer.OnCompletionList
                 case ACTION_PREVIOUS:
                     break;
                 case ACTION_PLAY:
+                    start();
                     break;
                 case ACTION_PAUSE:
+                    pause();
                     break;
                 case ACTION_PLAY_PAUSE:
+                    playPause();
                     break;
                 case ACTION_NEXT:
                     break;
