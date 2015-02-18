@@ -14,7 +14,7 @@ public final class ArtworkProvider {
     public ArtworkProvider() {
     }
 
-    public void addSize(@NonNull int size, @NonNull String url) {
+    public void addSize(int size, @NonNull String url) {
         artworks.put(size, url);
     }
 
