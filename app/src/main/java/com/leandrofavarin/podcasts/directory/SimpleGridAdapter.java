@@ -112,7 +112,7 @@ public class SimpleGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @Override
         public void onClick(View view) {
             if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(view, getPosition());
+                onItemClickListener.onItemClick(view, getLayoutPosition());
             }
         }
     }

@@ -4,7 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.example.android.common.view.SlidingTabLayout;
@@ -15,7 +15,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public abstract class SwipeableActivity extends ActionBarActivity {
+public abstract class SwipeableActivity extends AppCompatActivity {
 
     private static final String TAG = LogUtils.makeLogTag(SwipeableActivity.class);
 
